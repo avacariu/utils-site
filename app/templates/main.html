@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Utilities</h1>
+<p>These are just some small utilities I made to help me out. They might be of some use to other people.</p>
+<p>They are meant to be parsed by a script, not a person so nothing's done in terms of formatting. If you view the page's source, you'll probably find it more readable.</p>
+<ul>
+  <li><a href="{{ url_for('my_ip') }}">IP address</a></li>
+  <li><a href="{{ url_for('user_agent') }}">User agent string</a></li>
+  <li><a href="{{ url_for('request_body') }}">Request body</a></li>
+  <li><a href="{{ url_for('request_headers') }}">Request headers</a></li>
+  <li><a href="{{ url_for('md5sum') }}">md5sum</a>. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</li>
+  <li><a href="{{ url_for('sha1sum') }}">SHA sums</a>. Pass <code>ver=256&text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</li>
+  <li><a href="{{ url_for('fortune') }}">Fortune</a></li>
+</ul>
+{% endblock %}
