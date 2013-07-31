@@ -12,16 +12,16 @@ role :app, "ec2.avacariu.me"                          # This may be the same as 
 
 set :user, "ubuntu"
 set :use_sudo, false
-set :webserver_user, "www-data"
+#set :webserver_user, "www-data"
 default_run_options[:pty] = true
 
 set :permission_method, :acl
 set :use_set_permissions, true
 
 # virtualenv
-set :virtualenv_current_path, "venv"
-set :virtualenv_release_path, "venv"
-set :virtualenv_shared_path, "venv"
+set :virtualenv_current_path, "#{current_path}/venv"
+set :virtualenv_release_path, "#{release_path}/venv"
+set :virtualenv_shared_path, "#{shared_path}/venv"
 
 namespace :deploy do
     task :reload_uwsgi do
