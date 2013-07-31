@@ -3,6 +3,7 @@ set :deploy_to, "/var/www/utils"
 
 set :repository,  "https://github.com/vlad003/utils-site.git"
 set :scm, :git
+set :branch, "master"
 
 role :web, "ec2.avacariu.me"                          # Your HTTP server, Apache/etc
 role :app, "ec2.avacariu.me"                          # This may be the same as your `Web` server
