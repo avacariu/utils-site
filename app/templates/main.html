@@ -11,5 +11,17 @@
   <li><a href="{{ url_for('md5sum') }}">md5sum</a>. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</li>
   <li><a href="{{ url_for('sha1sum') }}">SHA sums</a>. Pass <code>ver=256&text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</li>
   <li><a href="{{ url_for('fortune') }}">Fortune</a></li>
+  <li>FTP frontend for Amazon S3 (read-only)
+    <dl>
+      <dt>Host</dt>
+      <dd>ec2.avacariu.me</dd>
+      <dt>Username</dt>
+      <dd>Access key ID<dd>
+      <dt>Password</dt>
+      <dd>Secret access key</dd>
+      <dt>Port</dt>
+      <dd>2121</dd>
+    </dl>
+  </li>
 </ul>
 {% endblock %}

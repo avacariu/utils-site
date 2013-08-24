@@ -33,12 +33,6 @@ namespace :utils do
     task :run_puppet do
         run "sudo puppet agent -t; true"
     end
-    task :show_vars do
-        puts "#{current_path}\n"
-        puts "#{release_path}\n"
-        puts "#{shared_path}\n"
-
-    end
 end
 
 after "deploy", "deploy:reload_uwsgi"
