@@ -27,14 +27,13 @@ def request_headers():
 
 @app.route('/md5sum', methods=['GET', 'POST'])
 def md5sum():
-    if 'text' in request.values:
-        return hashlib.md5(request.values['text']).hexdigest()
-    return hashlib.md5('').hexdigest()
+    text = request.values.get('text', '')
+    return hashlib.md5(text).hexdigest()
 
 @app.route('/sha1sum', methods=['GET', 'POST'])
 def sha1sum():
-    ver = request.values['ver'] if 'ver' in request.values else '1'
-    text = request.values['text'] if 'text' in request.values else ''
+    ver = request.values.get('ver', '1')
+    text = request.values.get('text', '')
 
     hash_obj = None
 
@@ -55,15 +54,12 @@ def sha1sum():
 
 @app.route('/fortune')
 def fortune():
-    option = ""
+    opt_trans = {'all': '-a', 'offensive': '-o'}
 
-    if "opt" in request.values:
-        if request.values["opt"] == "all":
-            option = "-a"
-        elif request.values["opt"] == "offensive":
-            option = "-o"
+    opt = request.values.get('opt', '')
+    param = opt_trans.get(opt, '')
 
     try:
-        return str(subprocess.check_output(["/usr/games/fortune", option]))
+        return str(subprocess.check_output(["/usr/games/fortune", param]))
     except Exception, e:
-        return ""
+        return ''
