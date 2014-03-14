@@ -15,7 +15,7 @@ class WSGICopyBody(object):
         environ['wsgi.input'] = StringIO(body)
 
         # Call the wrapped application
-        app_iter = self.application(environ, 
+        app_iter = self.application(environ,
                                     self._sr_callback(start_response))
 
         # Return modified response
