@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Utilities</h1>
 <p>These are just some small utilities I made to help me out. They might be of some use to other people.</p>
-<p>They are meant to be parsed by a script, not a person so nothing's done in terms of formatting. If you view the page's source, you'll probably find it more readable.</p>
+<p>There is absolutely no formatting. Output is just sent to the browser with <code>mimetype="text/plain"</code>.</p>
 <ul>
   <li><a href="{{ url_for('my_ip') }}">IP address</a></li>
   <li><a href="{{ url_for('user_agent') }}">User agent string</a></li>

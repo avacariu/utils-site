@@ -1,5 +1,5 @@
 from app import app
-from flask import request, url_for, render_template
+from flask import request, url_for, render_template, Response
 
 import hashlib
 import subprocess
@@ -11,24 +11,24 @@ def index():
 
 @app.route('/my_ip')
 def my_ip():
-    return request.remote_addr
+    return Response(request.remote_addr, mimetype="text/plain")
 
 @app.route('/user_agent')
 def user_agent():
-    return request.user_agent.string
+    return Response(request.user_agent.string, mimetype="text/plain")
 
 @app.route('/request_body', methods=['GET', 'POST'])
 def request_body():
-    return request.environ['body_copy']
+    return Response(request.environ['body_copy'], mimetype="text/plain")
 
 @app.route('/request_headers', methods=['GET', 'POST'])
 def request_headers():
-    return str(request.headers)
+    return Response(str(request.headers), mimetype="text/plain")
 
 @app.route('/md5sum', methods=['GET', 'POST'])
 def md5sum():
     text = request.values.get('text', '')
-    return hashlib.md5(text).hexdigest()
+    return Response(hashlib.md5(text).hexdigest(), mimetype="text/plain")
 
 @app.route('/sha1sum', methods=['GET', 'POST'])
 def sha1sum():
@@ -50,7 +50,7 @@ def sha1sum():
     else:
         return ''
 
-    return hash_obj.hexdigest()
+    return Response(hash_obj.hexdigest(), mimetype="text/plain")
 
 @app.route('/fortune')
 def fortune():
@@ -59,7 +59,11 @@ def fortune():
     opt = request.values.get('opt', '')
     param = opt_trans.get(opt, '')
 
+    ret = ''
+
     try:
-        return str(subprocess.check_output(["/usr/games/fortune", param]))
-    except Exception, e:
-        return ''
+        ret = str(subprocess.check_output(["/usr/games/fortune", param]))
+    except:
+        pass
+
+    return Response(ret, mimetype="text/plain")
