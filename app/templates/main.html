@@ -3,26 +3,30 @@
 <h1>Utilities</h1>
 <p>These are just some small utilities I made to help me out. They might be of some use to other people.</p>
 <p>There is absolutely no formatting. Output is just sent to the browser with <code>mimetype="text/plain"</code>.</p>
-<ul>
-  <li><a href="{{ url_for('my_ip') }}">IP address</a></li>
-  <li><a href="{{ url_for('user_agent') }}">User agent string</a></li>
-  <li><a href="{{ url_for('request_body') }}">Request body</a></li>
-  <li><a href="{{ url_for('request_headers') }}">Request headers</a></li>
-  <li><a href="{{ url_for('md5sum') }}">md5sum</a>. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</li>
-  <li><a href="{{ url_for('sha1sum') }}">SHA sums</a>. Pass <code>ver=256&text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</li>
-  <li><a href="{{ url_for('fortune') }}">Fortune</a></li>
-  <li>FTP frontend for Amazon S3 (read-only)
-    <dl>
-      <dt>Host</dt>
-      <dd>ec2.avacariu.me</dd>
-      <dt>Username</dt>
-      <dd>Access key ID<dd>
-      <dt>Password</dt>
-      <dd>Secret access key</dd>
-      <dt>Port</dt>
-      <dd>2121</dd>
-    </dl>
-  </li>
-  <li><a href="http://isitup.80x24.ca">Is it up?</a></li>
+<dl>
+  <dt>[GET]<a href="{{ url_for('my_ip') }}">IP address</a></dt>
+  <dl>Responds your external IP address.</dl>
+
+  <dt>[GET]<a href="{{ url_for('user_agent') }}">User agent string</a></dt>
+  <dl>Responds with your user agent string</dl>
+
+  <dt>[GET|POST]<a href="{{ url_for('request_body') }}">Request body</a></dt>
+  <dl>Responds with the body of the POST request you just sent.</dl>
+
+  <dt>[GET|POST]<a href="{{ url_for('request_headers') }}">Request headers</a></dt>
+  <dl>Responds with the headers of the request you just sent.</dl>
+
+  <dt>[GET|POST]<a href="{{ url_for('md5sum') }}">md5sum</a></dt>
+  <dl>Computes MD5 hash. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</dl>
+
+  <dt>[GET|POST]<a href="{{ url_for('sha1sum') }}">SHA sums</a></dt>
+  <dl>Computes SHA sums. Pass <code>ver=256&amp;text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</dl>
+
+  <dt>[GET]<a href="{{ url_for('fortune') }}">Fortune</a></dt>
+  <dl>Responds with whatever <code>fortune</code> outputs.</dl>
+
+  <dt><a href="http://isitup.80x24.ca">Is it up?</a></dt>
+  <dl>Keeps track of which of your machines are up.</dl>
+
 </ul>
 {% endblock %}
