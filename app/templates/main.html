@@ -4,29 +4,30 @@
 <p>These are just some small utilities I made to help me out. They might be of some use to other people.</p>
 <p>There is absolutely no formatting. Output is just sent to the browser with <code>mimetype="text/plain"</code>.</p>
 <dl>
-  <dt>[GET]<a href="{{ url_for('my_ip') }}">IP address</a></dt>
-  <dl>Responds your external IP address.</dl>
+  <dt><a href="{{ url_for('my_ip') }}">IP address</a> (GET)</dt>
+  <dd>Responds your external IP address.</dd>
 
-  <dt>[GET]<a href="{{ url_for('user_agent') }}">User agent string</a></dt>
-  <dl>Responds with your user agent string</dl>
+  <dt><a href="{{ url_for('user_agent') }}">User agent string</a> (GET)</dt>
+  <dd>Responds with your user agent string</dd>
 
-  <dt>[GET|POST]<a href="{{ url_for('request_body') }}">Request body</a></dt>
-  <dl>Responds with the body of the POST request you just sent.</dl>
+  <dt><a href="{{ url_for('request_body') }}">Request body</a> (GET|POST)</dt>
+  <dd>Responds with the body of the POST request you just sent.</dd>
 
-  <dt>[GET|POST]<a href="{{ url_for('request_headers') }}">Request headers</a></dt>
-  <dl>Responds with the headers of the request you just sent.</dl>
+  <dt><a href="{{ url_for('request_headers') }}">Request headers</a> (GET|POST)</dt>
+  <dd>Responds with the headers of the request you just sent.</dd>
 
-  <dt>[GET|POST]<a href="{{ url_for('md5sum') }}">md5sum</a></dt>
-  <dl>Computes MD5 hash. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</dl>
+  <dt><a href="{{ url_for('md5sum') }}">md5sum</a> (GET|POST)</dt>
+  <dd>Computes MD5 hash. Pass <code>text=TEXT</code> as a parameter. Default is <code>''</code>.</dd>
 
-  <dt>[GET|POST]<a href="{{ url_for('sha1sum') }}">SHA sums</a></dt>
-  <dl>Computes SHA sums. Pass <code>ver=256&amp;text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</dl>
+  <dt><a href="{{ url_for('sha1sum') }}">SHA sums</a> (GET|POST)</dt>
+  <dd>Computes SHA sums. Pass <code>ver=256&amp;text=TEXT</code> as parameters. Available versions are 1, 224, 256, 384 and 512. Default is <code>sha1('')</code>.</dd>
 
-  <dt>[GET]<a href="{{ url_for('fortune') }}">Fortune</a></dt>
-  <dl>Responds with whatever <code>fortune</code> outputs.</dl>
+  <dt><a href="{{ url_for('fortune') }}">Fortune</a> (GET)</dt>
+  <dd>Responds with whatever <code>fortune</code> outputs.</dd>
 
   <dt><a href="http://isitup.80x24.ca">Is it up?</a></dt>
-  <dl>Keeps track of which of your machines are up.</dl>
+  <dd>Keeps track of which of your machines are up.</dd>
+</dl>
 
 </ul>
 {% endblock %}
