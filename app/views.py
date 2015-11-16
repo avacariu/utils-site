@@ -9,8 +9,8 @@ def index():
     return render_template('main.html',
             title = "Utils")
 
-@app.route('/my_ip')
-def my_ip():
+@app.route('/ip')
+def ip():
     return Response(request.remote_addr, mimetype="text/plain")
 
 @app.route('/user_agent')
