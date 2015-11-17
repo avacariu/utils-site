@@ -1,5 +1,5 @@
 from app import app
-from flask import request, url_for, render_template, Response
+from flask import request, render_template, Response
 
 import hashlib
 import subprocess
@@ -11,7 +11,10 @@ def index():
 
 @app.route('/ip')
 def ip():
-    return Response(request.remote_addr, mimetype="text/plain")
+    addr = request.remote_addr
+    if addr.startswith('::ffff:'):
+        addr = addr.split(':')[-1]
+    return Response(addr, mimetype="text/plain")
 
 @app.route('/user_agent')
 def user_agent():
@@ -28,29 +31,27 @@ def request_headers():
 @app.route('/md5sum', methods=['GET', 'POST'])
 def md5sum():
     text = request.values.get('text', '')
-    return Response(hashlib.md5(text).hexdigest(), mimetype="text/plain")
+    return Response(hashlib.md5(text.encode()).hexdigest(), mimetype="text/plain")
 
 @app.route('/sha1sum', methods=['GET', 'POST'])
 def sha1sum():
     ver = request.values.get('ver', '1')
     text = request.values.get('text', '')
 
-    hash_obj = None
+    hashes = {
+        '1': hashlib.sha1,
+        '224': hashlib.sha224,
+        '256': hashlib.sha256,
+        '384': hashlib.sha384,
+        '512': hashlib.sha512
+    }
 
-    if ver == '1':
-        hash_obj = hashlib.sha1(text)
-    elif ver == '224':
-        hash_obj = hashlib.sha224(text)
-    elif ver == '256':
-        hash_obj = hashlib.sha256(text)
-    elif ver == '384':
-        hash_obj = hashlib.sha384(text)
-    elif ver == '512':
-        hash_obj = hashlib.sha512(text)
-    else:
-        return ''
+    try:
+        hash_obj = hashes[ver]
+    except KeyError:
+        return Response(status=400)
 
-    return Response(hash_obj.hexdigest(), mimetype="text/plain")
+    return Response(hash_obj(text.encode()).hexdigest(), mimetype="text/plain")
 
 @app.route('/fortune')
 def fortune():
@@ -62,7 +63,7 @@ def fortune():
     ret = ''
 
     try:
-        ret = str(subprocess.check_output(["/usr/games/fortune", param]))
+        ret = subprocess.check_output(["/usr/games/fortune", param]).decode()
     except:
         pass
 

@@ -6,13 +6,13 @@ class WSGICopyBody(object):
 
     def __call__(self, environ, start_response):
 
-        from cStringIO import StringIO
+        from io import BytesIO
         length = environ.get('CONTENT_LENGTH', '0')
         length = 0 if length == '' else int(length)
 
         body = environ['wsgi.input'].read(length)
         environ['body_copy'] = body
-        environ['wsgi.input'] = StringIO(body)
+        environ['wsgi.input'] = BytesIO(body)
 
         # Call the wrapped application
         app_iter = self.application(environ,
