@@ -1,8 +1,8 @@
-from app import app
+from app import app, cache
 from flask import request, render_template, Response
 
 import hashlib
-import subprocess
+import random
 
 @app.route('/')
 def index():
@@ -55,16 +55,21 @@ def sha1sum():
 
 @app.route('/fortune')
 def fortune():
-    opt_trans = {'all': '-a', 'offensive': '-o'}
+    options = {
+        'all': ('fortune_count', 'fortune_%d'),
+        'off': ('offensive_fortune_count', 'offensive_fortune_%d'),
+        'tame': ('tame_fortune_count', 'tame_fortune_%d')
+    }
 
-    opt = request.values.get('opt', '')
-    param = opt_trans.get(opt, '')
+    intersection = set(request.values.keys()) & set(options.keys())
+    if intersection:
+        selection = intersection.pop()
+    else:
+        selection = 'tame'
 
-    ret = ''
+    count, key = options[selection]
 
-    try:
-        ret = subprocess.check_output(["/usr/games/fortune", param]).decode()
-    except:
-        pass
+    fortune_number = random.randrange(0, cache.get(count))
+    fortune = cache.get(key % fortune_number)
 
-    return Response(ret, mimetype="text/plain")
+    return Response(fortune[1].strip(), mimetype="text/plain")
