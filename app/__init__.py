@@ -50,12 +50,12 @@ offensive_fortunes_paths = fortunes_path.glob('off/*.u8')
 
 offensive_fortunes = []
 for p in offensive_fortunes_paths:
-    with p.open() as f:
+    with p.open(encoding='utf-8') as f:
         offensive_fortunes.extend(codecs.decode(f.read(), 'rot13').split('%'))
 
 tame_fortunes = []
 for p in tame_fortunes_paths:
-    with p.open() as f:
+    with p.open(encoding='utf-8') as f:
         tame_fortunes.extend(f.read().split('%'))
 
 for fortune in enumerate(offensive_fortunes):
