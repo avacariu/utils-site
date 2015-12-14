@@ -72,4 +72,4 @@ def fortune():
     fortune_number = random.randrange(0, cache.get(count))
     fortune = cache.get(key % fortune_number)
 
-    return Response(fortune[1].strip(), mimetype="text/plain")
+    return Response(fortune.strip(), mimetype="text/plain")
