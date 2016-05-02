@@ -4,3 +4,4 @@
 venv/
 *~
 UWSGI_RELOAD
+.ropeproject/
