@@ -16,15 +16,15 @@ def ip():
         addr = addr.split(':')[-1]
     return Response(addr, mimetype="text/plain")
 
-@app.route('/user_agent')
+@app.route('/user-agent')
 def user_agent():
     return Response(request.user_agent.string, mimetype="text/plain")
 
-@app.route('/request_body', methods=['GET', 'POST'])
+@app.route('/request-body', methods=['GET', 'POST'])
 def request_body():
     return Response(request.environ['body_copy'], mimetype="text/plain")
 
-@app.route('/request_headers', methods=['GET', 'POST'])
+@app.route('/request-headers', methods=['GET', 'POST'])
 def request_headers():
     return Response(str(request.headers), mimetype="text/plain")
 
