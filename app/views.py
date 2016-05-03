@@ -28,31 +28,6 @@ def request_body():
 def request_headers():
     return Response(str(request.headers), mimetype="text/plain")
 
-@app.route('/md5sum', methods=['GET', 'POST'])
-def md5sum():
-    text = request.values.get('text', '')
-    return Response(hashlib.md5(text.encode()).hexdigest(), mimetype="text/plain")
-
-@app.route('/sha1sum', methods=['GET', 'POST'])
-def sha1sum():
-    ver = request.values.get('ver', '1')
-    text = request.values.get('text', '')
-
-    hashes = {
-        '1': hashlib.sha1,
-        '224': hashlib.sha224,
-        '256': hashlib.sha256,
-        '384': hashlib.sha384,
-        '512': hashlib.sha512
-    }
-
-    try:
-        hash_obj = hashes[ver]
-    except KeyError:
-        return Response(status=400)
-
-    return Response(hash_obj(text.encode()).hexdigest(), mimetype="text/plain")
-
 @app.route('/fortune')
 def fortune():
     options = {
