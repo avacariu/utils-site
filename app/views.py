@@ -9,26 +9,26 @@ def index():
     return render_template('main.html',
             title = "Utils")
 
-@app.route('/ip')
+@app.route('/raw/ip')
 def ip():
     addr = request.remote_addr
     if addr.startswith('::ffff:'):
         addr = addr.split(':')[-1]
     return Response(addr, mimetype="text/plain")
 
-@app.route('/user-agent')
+@app.route('/raw/user-agent')
 def user_agent():
     return Response(request.user_agent.string, mimetype="text/plain")
 
-@app.route('/request-body', methods=['GET', 'POST'])
+@app.route('/raw/request-body', methods=['GET', 'POST'])
 def request_body():
     return Response(request.environ['body_copy'], mimetype="text/plain")
 
-@app.route('/request-headers', methods=['GET', 'POST'])
+@app.route('/raw/request-headers', methods=['GET', 'POST'])
 def request_headers():
     return Response(str(request.headers), mimetype="text/plain")
 
-@app.route('/fortune')
+@app.route('/raw/fortune')
 def fortune():
     options = {
         'all': ('fortune_count', 'fortune_%d'),
@@ -48,3 +48,13 @@ def fortune():
     fortune = cache.get(key % fortune_number)
 
     return Response(fortune.strip(), mimetype="text/plain")
+
+@app.route('/amionline')
+@app.route('/amionline/<string:foo>', methods=['GET', 'POST'])
+def amionline(foo=None):
+    if foo is None:
+        res = "Usage: GET /amionline/RANDOM_STRING"
+    else:
+        res = foo
+
+    return Response(res, mimetype="text/plain")

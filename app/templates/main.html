@@ -18,6 +18,9 @@
   <dt><a href="{{ url_for('request_headers') }}">Request headers</a> <span class="request-type">(GET | POST)</span></dt>
   <dd>Responds with the headers of the request you just sent.</dd>
 
+  <dt><a href="{{ url_for('amionline') }}">Online check</a> <span class="request-type">(GET | POST)</span></dt>
+  <dd>Check if you have internet access by sending a request to <code>/amionline/RANDOMSTRING</code> and checking if the response is <em>exactly</em> <code>RANDOMSTRING</code>.</dd>
+
   <dt><a href="{{ url_for('fortune') }}">Fortune</a> <span class="request-type">(GET)</span></dt>
   <dd>Responds with whatever <code>fortune</code> outputs.</dd>
 </dl>
