@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Timer</title>
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+
+  <style>
+  html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    font-size: 16px;
+  }
+  body {
+    display: table;
+    font-family: "Roboto", sans-serif;
+  }
+  #timer {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 200px;
+    font-weight: bold;
+    color: black;
+  }
+  #settings-btn {
+    background: white;
+    border: none;
+    font-size: 2rem;
+    color: gray;
+    position: absolute;
+    right: 16px;
+    bottom: 10px;
+    width: 50px;
+    height: 50px;
+  }
+  #settings-btn:hover,
+  #settings-btn.pressed {
+    color: #616161;
+  }
+  #settings-btn.pressed {
+    border: 1px solid lightgray;
+    border-top: none;
+  }
+  #controls {
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    width: 300px;
+    left: calc(50% - 150px);
+  }
+  #controls button {
+    width: 32%;
+  }
+  #controls button.suggested {
+    font-weight: bold;
+  }
+  button {
+    background: #F9F9F9;
+    border: 1px solid lightgray;
+    color: #333;
+    padding: 2px;
+    line-height: 20px;
+    font-size: 13px;
+    font-family: "Roboto", sans-serif;
+  }
+  button:hover {
+    background-color: #F0F0F0;
+  }
+  #settings {
+    position: absolute;
+    right: 16px;
+    bottom: 59px;
+    padding: 10px;
+    border: 1px solid lightgray;
+    display: none;
+    background: white;
+  }
+  #settings form {
+    text-align: center;
+  }
+  #settings label {
+    display: block;
+    clear: both;
+    margin-bottom: 5px;
+    text-align: right;
+  }
+  #settings label small {
+    width: 45px;
+    display: inline-block;
+    text-align: left;
+  }
+  #settings input {
+    width: 50px;
+    text-align: right;
+    font-family: "Roboto", sans-serif;
+  }
+  #settings button {
+    width: 100%;
+  }
+  #status {
+    width: 300px;
+    position: absolute;
+    left: calc(50% - 150px);
+    bottom: 4rem;
+    text-align: center;
+  }
+  body.in-progress #settings-btn {
+    opacity: 0.3;
+  }
+  body.in-progress #settings-btn:hover,
+  body.in-progress #settings-btn.pressed {
+    opacity: 1;
+  }
+  body.in-progress #controls {
+    opacity: 0.3;
+  }
+  body.in-progress #controls:hover {
+    opacity: 1;
+  }
+  body.in-progress #controls button {
+    background: white;
+    color: gray;
+  }
+  body.in-progress #controls:hover button {
+    background: #F9F9F9;
+    color: #333;
+  }
+  body.in-progress #controls:hover button:hover {
+    background-color: #F0F0F0;
+  }
+  </style>
+
+  <script>
+
+  // credit to http://stackoverflow.com/a/2880929/398749 for this function
+  var urlParams;
+  (window.onpopstate = function () {
+      var match,
+          pl     = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+          query  = window.location.search.substring(1);
+
+      urlParams = {};
+      while (match = search.exec(query))
+         urlParams[decode(match[1])] = decode(match[2]);
+  })();
+  // end credited code
+
+  window.onload = function() {
+    var settingsBtn = document.getElementById("settings-btn");
+    settingsBtn.addEventListener("click",
+        function() {
+          var settings = document.getElementById("settings");
+          var hidden = getComputedStyle(settings, null).display;
+
+          settingsBtn.classList.toggle("pressed")
+
+          if (hidden == "none") {
+            settings.style.display = "block";
+          } else {
+            settings.style.display = "none";
+          }
+        }
+    );
+
+    var preferences = {
+      "work": 25,
+      "short": 5,
+      "long": 10,
+      "periods": 3,
+      "seconds": true,
+    }
+
+    for (var param in urlParams) {
+      if (param != undefined && param != "" && !isNaN(urlParams[param]) && preferences.hasOwnProperty(param)) {
+        preferences[param] = parseInt(urlParams[param]);
+      } else if (param == "seconds") {
+        preferences[param] = (urlParams[param] == "true");
+      }
+    }
+
+    document.getElementById("inputWork").value = preferences["work"];
+    document.getElementById("inputShortBreak").value = preferences["short"];
+    document.getElementById("inputLongBreak").value = preferences["long"];
+    document.getElementById("inputPeriods").value = preferences["periods"];
+    document.getElementById("inputSeconds").value = preferences["seconds"];
+
+    var status = document.getElementById("status");
+    var statusText = "";
+    var endStatus = "";
+    var currentMode = "none";
+
+    var periodsWorked = 0;
+
+    var timer = document.getElementById("timer");
+
+    if (preferences["seconds"] == true)
+      var _secs = ":00";
+    else
+      var _secs = "";
+    timer.textContent = preferences["work"] < 10 ? "0" + preferences["work"]+_secs : preferences["work"]+_secs;
+
+    var timerIntervalId = null;
+
+    var controlWork = document.getElementById("work");
+    var controlShort = document.getElementById("short-break");
+    var controlLong = document.getElementById("long-break");
+
+    var suggestedControl = controlWork;
+
+    // suggest a button to press
+    function suggest(control) {
+      controlWork.className = "";
+      controlShort.className = "";
+      controlLong.className = "";
+
+      if (control != null)
+        control.className = "suggested";
+    }
+
+    suggest(suggestedControl);
+
+    // duration is number of minutes
+    function startTimer(duration, display) {
+      suggest(null);
+      var timer = duration*60, minutes, seconds;
+      function countdown() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        if (currentMode === "work" && preferences["seconds"] == false)
+          display.textContent = minutes;
+        else
+          display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          display.style.color = "red";
+          clearInterval(timerIntervalId);
+          status.textContent = endStatus;
+          suggest(suggestedControl);
+          document.body.className = "";
+        }
+      }
+
+      countdown();
+      return setInterval(countdown, 1000);
+    }
+
+    controlWork.addEventListener("click",
+        function() {
+          currentMode = "work";
+          timer.style.color = "black";
+          document.body.className = "in-progress";
+          clearInterval(timerIntervalId);
+          timerIntervalId = startTimer(preferences["work"], timer);
+          status.textContent = "";
+          endStatus = "Work has ended. Take a break!";
+          periodsWorked++;
+          if (preferences["periods"] == periodsWorked) {
+            suggestedControl = controlLong;
+          } else {
+            suggestedControl = controlShort;
+          }
+        }
+    );
+
+    controlShort.addEventListener("click",
+        function() {
+          currentMode = "short";
+          timer.style.color = "orange";
+          document.body.className = "";
+          clearInterval(timerIntervalId);
+          timerIntervalId = startTimer(preferences["short"], timer);
+          status.textContent = "Short break!";
+          endStatus = "Break ended. Get back to work!";
+          suggestedControl = controlWork;
+        }
+    );
+
+    controlLong.addEventListener("click",
+        function() {
+          currentMode = "long";
+          timer.style.color = "green";
+          document.body.className = "";
+          clearInterval(timerIntervalId);
+          timerIntervalId = startTimer(preferences["long"], timer);
+          status.textContent = "Long break!";
+          endStatus = "Break ended. Get back to work!";
+          suggestedControl = controlWork;
+          periodsWorked = 0;
+        }
+    );
+
+    window.addEventListener("keyup", function(event) {
+      if (event.keyCode == 32) {
+        suggestedControl.dispatchEvent(new Event('click'));
+      }
+    });
+  }
+  </script>
+
+</head>
+<body>
+
+  <div id="timer"></div>
+
+  <div id="status">Ready to get started.</div>
+
+  <div id="controls">
+    <button id="work">work</button>
+    <button id="short-break">short break</button>
+    <button id="long-break">long break</button>
+  </div>
+
+  <div id="settings">
+    <form action="" method="GET">
+      <label for="inputWork">Work
+        <input id="inputWork" type="text" name="work" /> <small>mins</small>
+      </label>
+
+      <label for="inputShortBreak">Short break
+        <input id="inputShortBreak" type="text" name="short" /> <small>mins</small>
+      </label>
+
+      <label for="inputLongBreak">Long break
+        <input id="inputLongBreak" type="text" name="long" /> <small>mins</small>
+      </label>
+
+      <label for="inputPeriods">Work periods
+        <input id="inputPeriods" type="text" name="periods" /> <small></small>
+      </label>
+
+      <label for="inputSeconds">Show seconds
+        <input id="inputSeconds" type="text" name="seconds" /> <small></small>
+      </label>
+
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <button id="settings-btn">&#9881;</button>
+
+</body>
+</html>

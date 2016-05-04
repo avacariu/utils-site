@@ -28,6 +28,9 @@
 
   <dt><a href="{{ url_for('amionline') }}">Online check</a> <span class="request-type">(GET | POST)</span></dt>
   <dd>Check if you have internet access by sending a request to <code>/amionline/RANDOMSTRING</code> and checking if the response is <em>exactly</em> <code>RANDOMSTRING</code>.</dd>
+
+  <dt><a href="{{ url_for('timer') }}">Pomodoro-style timer</a></dt>
+  <dd>Keeps you on track.</dd>
 </dl>
 
 <h2>Just for fun</h2>
@@ -43,8 +46,5 @@
 <dl>
   <dt><a href="https://isitup.80x24.ca">Is it up?</a></dt>
   <dd>Keeps track of which of your machines are up.</dd>
-
-  <dt><a href="https://timer.80x24.ca">Pomodoro-style timer</a></dt>
-  <dd>Keeps you on track.</dd>
 </dl>
 {% endblock %}

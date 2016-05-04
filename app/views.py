@@ -61,5 +61,8 @@ def amionline(foo=None):
 
 @app.route('/random-name')
 def random_name():
-    return render_template('random-name.html',
-            title = "Random name")
+    return render_template('random-name.html')
+
+@app.route('/timer')
+def timer():
+    return render_template('timer.html')
