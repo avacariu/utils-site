@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Random Name Generator</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,400italic,500|Ubuntu+Mono' rel='stylesheet' type='text/css'>
+
+    <style>
+      body {
+        height: 80px;
+        width: 300px;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -150px;
+        margin-top: -40px;
+        font-family: "Roboto", sans-serif;
+      }
+      #output {
+        display: block;
+        text-align: center;
+        font-size: 1.25rem;
+        height: 50px;
+      }
+      button {
+        margin-top: 20px;
+        font-size: 2rem;
+        border: none;
+        background: none;
+      }
+      button:focus {
+        border: none;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <span id="output"></span>
+    <button id="randomize">&#x21bb;</button>
+
+    <script>
+      var nouns;
+      var adjectives;
+
+      window.onload = function() {
+        var randomizeBtn = document.getElementById("randomize");
+        var outputSpan = document.getElementById("output");
+
+        function randElem(array) {
+          return array[Math.floor(Math.random() * array.length)];
+        }
+
+        var req = new XMLHttpRequest();
+
+        req.onload = function () {
+          var data = JSON.parse(req.responseText);
+
+          nouns = data['nouns'];
+          adjectives = data['adjectives'];
+
+          var output = ["the", randElem(adjectives), randElem(nouns)];
+          outputSpan.textContent = output.join(" ");
+        }
+
+        req.open("GET", "{{ url_for('static', filename='adj-noun.json') }}", true);
+        req.send();
+
+        randomizeBtn.addEventListener("click",
+            function() {
+              var output = ["the", randElem(adjectives), randElem(nouns)];
+              outputSpan.textContent = output.join(" ");
+            }
+        )
+      }
+    </script>
+  </body>
+</html>

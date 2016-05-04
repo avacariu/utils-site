@@ -58,3 +58,8 @@ def amionline(foo=None):
         res = foo
 
     return Response(res, mimetype="text/plain")
+
+@app.route('/random-name')
+def random_name():
+    return render_template('random-name.html',
+            title = "Random name")

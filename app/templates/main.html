@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Utilities</h1>
-<p>These are just some small utilities I made to help me out. They might be of some use to other people.</p>
-<p>There is absolutely no formatting. Output is just sent to the browser with <code>mimetype="text/plain"</code>.</p>
+<p>
+  These are a few miscellaneous things I made to help me out; some just for
+  fun.
+</p>
 
-<h2>Utilities hosted on this site</h2>
+<h2>Useful stuff</h2>
+
+<p>
+  There is absolutely no formatting here; output is sent to the browser with
+  <code>mimetype="text/plain"</code>.
+</p>
+
 <dl>
   <dt><a href="{{ url_for('ip') }}">IP address</a> <span class="request-type">(GET)</span></dt>
   <dd>Responds your external IP address.</dd>
@@ -20,9 +28,15 @@
 
   <dt><a href="{{ url_for('amionline') }}">Online check</a> <span class="request-type">(GET | POST)</span></dt>
   <dd>Check if you have internet access by sending a request to <code>/amionline/RANDOMSTRING</code> and checking if the response is <em>exactly</em> <code>RANDOMSTRING</code>.</dd>
+</dl>
 
-  <dt><a href="{{ url_for('fortune') }}">Fortune</a> <span class="request-type">(GET)</span></dt>
+<h2>Just for fun</h2>
+<dl>
+  <dt><a href="{{ url_for('fortune') }}">Fortune</a></dt>
   <dd>Responds with whatever <code>fortune</code> outputs.</dd>
+
+  <dt><a href="{{ url_for('random_name') }}">Random name generator</a></dt>
+  <dd>Generates a random name formatted as &ldquo;the adjective noun&rdquo;.</dd>
 </dl>
 
 <h2>Utilities with their own sites</h2>
@@ -32,8 +46,5 @@
 
   <dt><a href="https://timer.80x24.ca">Pomodoro-style timer</a></dt>
   <dd>Keeps you on track.</dd>
-
-  <dt><a href="https://amionline.80x24.ca">Am I Online?</a></dt>
-  <dd>Your app can now figure out if it's online.</dd>
 </dl>
 {% endblock %}
