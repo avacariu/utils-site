@@ -1,13 +1,13 @@
 from app import app, cache
 from flask import request, render_template, Response
 
-import hashlib
 import random
+
 
 @app.route('/')
 def index():
-    return render_template('main.html',
-            title = "Utils")
+    return render_template('main.html', title="Utils")
+
 
 @app.route('/raw/ip')
 def ip():
@@ -16,17 +16,21 @@ def ip():
         addr = addr.split(':')[-1]
     return Response(addr, mimetype="text/plain")
 
+
 @app.route('/raw/user-agent')
 def user_agent():
     return Response(request.user_agent.string, mimetype="text/plain")
+
 
 @app.route('/raw/request-body', methods=['GET', 'POST'])
 def request_body():
     return Response(request.environ['body_copy'], mimetype="text/plain")
 
+
 @app.route('/raw/request-headers', methods=['GET', 'POST'])
 def request_headers():
     return Response(str(request.headers), mimetype="text/plain")
+
 
 @app.route('/raw/fortune')
 def fortune():
@@ -49,6 +53,7 @@ def fortune():
 
     return Response(fortune.strip(), mimetype="text/plain")
 
+
 @app.route('/amionline')
 @app.route('/amionline/<string:foo>', methods=['GET', 'POST'])
 def amionline(foo=None):
@@ -59,9 +64,11 @@ def amionline(foo=None):
 
     return Response(res, mimetype="text/plain")
 
+
 @app.route('/random-name')
 def random_name():
     return render_template('random-name.html')
+
 
 @app.route('/timer')
 def timer():
