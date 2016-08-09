@@ -1,5 +1,5 @@
 from flask import Flask
-from flask.ext.cache import Cache
+from flask_cache import Cache
 
 import pathlib
 import codecs
@@ -42,6 +42,7 @@ class IncCache(Cache):
     def inc(self, *args, **kwargs):
         return self.cache.inc(*args, **kwargs)
 
+
 def _clean_fortune(fortune: str) -> str:
     """Remove non-printable characters from text."""
     return "".join(c for c in fortune if c in string.printable)
@@ -76,4 +77,4 @@ for fortune in tame_fortunes:
     cache.set('tame_fortune_%d' % tame_count, _clean_fortune(fortune))
     cache.set('fortune_%d' % all_count, _clean_fortune(fortune))
 
-from app import views
+from . import views
