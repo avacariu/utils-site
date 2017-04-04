@@ -73,3 +73,8 @@ def random_name():
 @app.route('/timer')
 def timer():
     return render_template('timer.html')
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    return render_template('robots.txt')
