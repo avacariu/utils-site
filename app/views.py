@@ -1,5 +1,5 @@
 from app import app, cache
-from flask import request, render_template, Response
+from flask import request, render_template, Response, make_response
 
 import random
 
@@ -77,4 +77,6 @@ def timer():
 
 @app.route('/robots.txt')
 def robots_txt():
-    return render_template('robots.txt')
+    resp = make_response(render_template('robots.txt'))
+    resp.mimetype = "text/plain"
+    return resp
