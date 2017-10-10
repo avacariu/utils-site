@@ -46,6 +46,21 @@
       var nouns;
       var adjectives;
 
+      // credit to http://stackoverflow.com/a/2880929/398749 for this function
+      var urlParams;
+      (window.onpopstate = function () {
+        var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
+
+        urlParams = {};
+        while (match = search.exec(query))
+          urlParams[decode(match[1])] = decode(match[2]);
+      })();
+      // end credited code
+
       window.onload = function() {
         var randomizeBtn = document.getElementById("randomize");
         var outputSpan = document.getElementById("output");
@@ -53,6 +68,16 @@
         function randElem(array) {
           return array[Math.floor(Math.random() * array.length)];
         }
+
+        function maybeRand(array, maybe) {
+          if (maybe !== undefined) {
+            return maybe;
+          }
+          return randElem(array);
+        }
+
+        var adjective = urlParams['adjective'];
+        var noun = urlParams['noun'];
 
         var req = new XMLHttpRequest();
 
@@ -62,7 +87,7 @@
           nouns = data['nouns'];
           adjectives = data['adjectives'];
 
-          var output = ["the", randElem(adjectives), randElem(nouns)];
+          var output = ["the", maybeRand(adjectives, adjective), maybeRand(nouns, noun)];
           outputSpan.textContent = output.join(" ");
         }
 
@@ -71,7 +96,7 @@
 
         randomizeBtn.addEventListener("click",
             function() {
-              var output = ["the", randElem(adjectives), randElem(nouns)];
+              var output = ["the", maybeRand(adjectives, adjective), maybeRand(nouns, noun)];
               outputSpan.textContent = output.join(" ");
             }
         )
