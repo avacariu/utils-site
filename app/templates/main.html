@@ -14,9 +14,6 @@
 </p>
 
 <dl>
-  <dt><a href="{{ url_for('ip') }}">IP address</a> <span class="request-type">(GET)</span></dt>
-  <dd>Responds your external IP address.</dd>
-
   <dt><a href="{{ url_for('user_agent') }}">User agent string</a> <span class="request-type">(GET)</span></dt>
   <dd>Responds with your user agent string</dd>
 
@@ -24,7 +21,7 @@
   <dd>Responds with the body of the POST request you just sent.</dd>
 
   <dt><a href="{{ url_for('request_headers') }}">Request headers</a> <span class="request-type">(GET | POST)</span></dt>
-  <dd>Responds with the headers of the request you just sent.</dd>
+  <dd>Responds with the headers of the request you just sent. Note that since this is behind CloudFlare and hosted on Heroku, there might be more headers than you expect.</dd>
 
   <dt><a href="{{ url_for('amionline') }}">Online check</a> <span class="request-type">(GET | POST)</span></dt>
   <dd>Check if you have internet access by sending a request to <code>/amionline/RANDOMSTRING</code> and checking if the response is <em>exactly</em> <code>RANDOMSTRING</code>.</dd>
@@ -35,9 +32,6 @@
 
 <h2>Just for fun</h2>
 <dl>
-  <dt><a href="{{ url_for('fortune') }}">Fortune</a></dt>
-  <dd>Responds with whatever <code>fortune</code> outputs.</dd>
-
   <dt><a href="{{ url_for('random_name') }}">Random name generator</a></dt>
   <dd>Generates a random name formatted as &ldquo;the adjective noun&rdquo;.</dd>
 </dl>
